@@ -28,9 +28,11 @@
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
                 base.$el.append('<img src="'+slide.image+'" alt="'+slide.title+'"/>');
-                var link = $('<a href="#"><li></li></a>');
-                link.click(base.clickLink);
-                base.options.pager.append(link);
+                if(base.slides.length > 1){
+                    var link = $('<a href="#"><li></li></a>');
+                    link.click(base.clickLink);
+                    base.options.pager.append(link);
+                }
             }
             base.$el.width(base.count*base.options.slideWidth);
             if ($.fn.touchwipe) {
