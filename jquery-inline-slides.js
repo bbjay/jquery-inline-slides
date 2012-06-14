@@ -9,6 +9,7 @@
         // To avoid scope issues, use 'base' instead of 'this'
         // to reference this class from internal events and functions.
         var base = this;
+        var vendorPrefixes = ['Moz', 'Webkit', 'Khtml', 'O', 'ms'];
 
         // Access to jQuery and DOM versions of element
         base.$el = $(el);
@@ -28,11 +29,21 @@
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
                 base.$el.append('<img src="'+slide.image+'" alt="'+slide.title+'"/>');
-                var link = $('<a href="#"><li></li></a>');
-                link.click(base.clickLink);
-                base.options.pager.append(link);
+                if(base.slides.length > 1){
+                    var link = $('<a href="#"><li></li></a>');
+                    link.click(base.clickLink);
+                    base.options.pager.append(link);
+                }
             }
             base.$el.width(base.count*base.options.slideWidth);
+
+            //Add all CSS3 transition property with vendorPrefixes
+            for (var n = 0; n < vendorPrefixes.length; n++) {
+                var prefix = '-' + vendorPrefixes[n].toLowerCase() + '-transition';
+                var propertyValue = 'all ' + base.options.duration + ' ' + base.options.easing;
+                base.$el.css(prefix, propertyValue);
+            }
+
             if ($.fn.touchwipe) {
                 base.$el.touchwipe({
                      wipeLeft: base.slideLeft,
@@ -91,7 +102,7 @@
             if(typeof s[p] == 'string') {return p; }
 
             // Tests for vendor specific prop
-            v = ['Moz', 'Webkit', 'Khtml', 'O', 'ms'];
+            v = vendorPrefixes;
             pu = p.charAt(0).toUpperCase() + p.substr(1);
             for(var i=0; i<v.length; i++) {
                 if(typeof s[v[i] + pu] == 'string') { 
@@ -108,7 +119,9 @@
     $.inlineSlides.defaultOptions = {
         pager: null,
         detail: null,
-        slideWidth: null
+        slideWidth: null,
+        duration: '0.3s',
+        easing: 'ease'
     };
 
     $.fn.inlineSlides = function(slides, options){
