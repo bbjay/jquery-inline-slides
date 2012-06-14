@@ -1,7 +1,7 @@
 /**
  * jQuery Plugin to display an inline slideshow with css3 transforms and fallback
  * 
- * @author Jérémie Blaser, allink.creative (http://allink.ch)
+ * @author Jérémie Blaser, Marius Küng allink.creative (http://allink.ch)
  * @version 1.0 (2012-05-22)
  */
  (function($){
@@ -43,7 +43,8 @@
                 });
             }
 
-            base.transformProp = base.getTransformProp();
+            base.transformProp = base.getCSSProp('transform');
+            base.transitionProp = base.getCSSProp('transition');
             base.showSlideNr(0);
       };
         base.clickLink = function(e){
@@ -66,22 +67,27 @@
                 base.options.detail.html('<h3>'+ (index+1) +'/'+base.count+'<br>'+slide.title+'</h3>');
             }
             var offset = -1*index*base.options.slideWidth;
-            if (base.transformProp) {
+            if (base.transformProp && base.transitionProp) {
                 base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
                 base.$el.css(base.transformProp,'translate3d('+ offset +'px,0,0)');
             }
+            else if(base.transitionProp){
+                base.$el.css(base.transitionProp,'left ' + offset +'px');
+            }
             else {
-                base.$el.css('left', offset );
+                base.$el.animate({
+                    left: offset
+                });
             }
             
             base.options.pager.children().removeClass('active');
             $(base.options.pager.children()[index]).addClass('active');
         };
 
-        base.getTransformProp = function () {
+        base.getCSSProp = function (property) {
             var b = document.body || document.documentElement;
             var s = b.style;
-            var p = 'transform';
+            var p = property;
             if(typeof s[p] == 'string') {return p; }
 
             // Tests for vendor specific prop
