@@ -43,6 +43,7 @@
                 var propertyValue = 'all ' + base.options.duration + ' ' + base.options.easing;
                 base.$el.css(prefix, propertyValue);
             }
+            base.$el.css('transition', 'all ' + base.options.duration + ' ' + base.options.easing);
 
             if ($.fn.touchwipe) {
                 base.$el.touchwipe({
