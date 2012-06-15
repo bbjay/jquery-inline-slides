@@ -28,7 +28,12 @@
 
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
-                base.$el.append('<img src="'+slide.image+'" alt="'+slide.title+'"/>');
+                var slideImage = '<img src="'+slide.image+'" alt="'+slide.title+'"/>';
+                if(base.options.link){
+                    base.$el.append('<a href="' + base.options.link + '">' + slideImage + '</a>');
+                }
+                else
+                    base.$el.append(slideImage);
                 if(base.slides.length > 1){
                     var link = $('<a href="#"><li></li></a>');
                     link.click(base.clickLink);
@@ -122,7 +127,8 @@
         detail: null,
         slideWidth: null,
         duration: '0.3s',
-        easing: 'ease'
+        easing: 'ease',
+        link: null
     };
 
     $.fn.inlineSlides = function(slides, options){
