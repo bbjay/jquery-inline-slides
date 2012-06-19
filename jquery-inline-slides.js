@@ -29,8 +29,8 @@
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
                 var slideImage = '<img src="'+slide.image+'" alt="'+slide.title+'"/>';
-                if(base.options.link){
-                    base.$el.append('<a href="' + base.options.link + '">' + slideImage + '</a>');
+                if(slide.link){
+                    base.$el.append('<a href="' + slide.link + '">' + slideImage + '</a>');
                 }
                 else
                     base.$el.append(slideImage);
@@ -127,8 +127,7 @@
         detail: null,
         slideWidth: null,
         duration: '0.3s',
-        easing: 'ease',
-        link: null
+        easing: 'ease'
     };
 
     $.fn.inlineSlides = function(slides, options){
