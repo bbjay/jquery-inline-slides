@@ -90,7 +90,8 @@
             if (base.options.detail){
                 base.options.detail.html('<h3>'+ (index+1) +'/'+base.count+'<br>'+slide.title+'</h3>');
             }
-            var offset = -1*index*base.options.slideWidth;
+            var offset = -1*index*base.$el.parent().width();
+
             if (base.transformProp && base.transitionProp) {
                 base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
                 base.$el.css(base.transformProp,'translate3d('+ offset +'px,0,0)');
@@ -132,7 +133,6 @@
     $.inlineSlides.defaultOptions = {
         pager: null,
         detail: null,
-        slideWidth: null,
         duration: '0.3s',
         easing: 'ease',
         type: 'img'
