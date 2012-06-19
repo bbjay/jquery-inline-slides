@@ -28,12 +28,19 @@
 
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
-                var slideImage = '<img src="'+slide.image+'" alt="'+slide.title+'"/>';
+                var slideContent;
+                if (base.options.type == 'div'){
+                    slideContent = '<div style="background-image: url(' + slide.image + ');"></div>';
+                }
+                else if (base.options.type == 'img'){
+                    slideContent = '<img src="'+slide.image+'" alt="'+slide.title+'"/>';
+                }
                 if(slide.link){
-                    base.$el.append('<a href="' + slide.link + '">' + slideImage + '</a>');
+                    base.$el.append('<a href="' + slide.link + '">' + slideContent + '</a>');
                 }
                 else
-                    base.$el.append(slideImage);
+                    base.$el.append(slideContent);
+                
                 if(base.slides.length > 1){
                     var link = $('<a href="#"><li></li></a>');
                     link.click(base.clickLink);
@@ -127,7 +134,8 @@
         detail: null,
         slideWidth: null,
         duration: '0.3s',
-        easing: 'ease'
+        easing: 'ease',
+        type: 'img'
     };
 
     $.fn.inlineSlides = function(slides, options){
