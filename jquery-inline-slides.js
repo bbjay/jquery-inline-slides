@@ -88,7 +88,7 @@
             if (!slide) return;
             base.currentIndex = index;
             if (base.options.detail){
-                base.options.detail.html('<h3>'+ (index+1) +'/'+base.count+'<br>'+slide.title+'</h3>');
+                base.options.detail.html(slide.desc);
             }
             var offset = -1*index*base.$el.parent().width();
 
