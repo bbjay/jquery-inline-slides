@@ -47,7 +47,7 @@
                     base.options.pager.append(link);
                 }
             }
-            base.$el.width(base.count*base.options.slideWidth);
+            base.$el.width(base.count * base.$el.width());
 
             //Add all CSS3 transition property with vendorPrefixes
             for (var n = 0; n < vendorPrefixes.length; n++) {
