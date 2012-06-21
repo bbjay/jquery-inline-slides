@@ -1,0 +1,56 @@
+body{
+    padding-bottom: 20px;
+    font-family: Helvetica, Arial sans-serif;
+}
+#wrapper{
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+/* The styling is up to you*/
+
+#slideshow-wrapper{
+    overflow: hidden; /* create a mask around the images */
+    width: 100%;
+}
+#slideshow-wrapper:after{
+    clear: both;
+}
+
+.slideshow-images img{
+    display: block;
+    height: auto;
+    float: left;
+}
+ul.pager{
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    width: 242px;
+    padding:0;
+    font-size: 28px;
+    line-height: 15px;
+    text-align: center;
+}
+ul.pager a{
+    min-width:20px;
+    min-height:20px;
+    display: inline-block;
+    color: #e1e1e1;
+}
+ul.pager .active{
+    color: #F00;
+}
+ul.pager li{
+    float:left;
+    display: list-item;
+    list-style-position: inside;
+    list-style-type: disc;
+    padding: 0 5px;
+    width: 11px;
+}
+#detail{
+    margin: 0 auto;
+    width: auto;
+}
