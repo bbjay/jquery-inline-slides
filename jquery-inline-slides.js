@@ -31,6 +31,8 @@
                 var slideContent;
                 if (base.options.type == 'div'){
                     slideContent = '<div style="background-image: url(' + slide.image + ');"></div>';
+                    if(base.options.detail.desktop)
+                        slideContent = '<div style="background-image: url(' + slide.image + ');"><div class="' + base.options.detail.desktop + '">' + slide.desc.desktop + '</div></div>';
                 }
                 else if (base.options.type == 'img'){
                     slideContent = '<img src="'+slide.image+'" alt="'+slide.title+'"/>';
@@ -40,14 +42,14 @@
                 }
                 else
                     base.$el.append(slideContent);
-                
+
                 if(base.slides.length > 1){
                     var link = $('<a href="#"><li></li></a>');
                     link.click(base.clickLink);
                     base.options.pager.append(link);
                 }
             }
-            base.$el.width(base.count * base.$el.width());
+            base.$el.width(base.count*base.options.slideWidth);
 
             //Add all CSS3 transition property with vendorPrefixes
             for (var n = 0; n < vendorPrefixes.length; n++) {
@@ -88,7 +90,10 @@
             if (!slide) return;
             base.currentIndex = index;
             if (base.options.detail){
-                base.options.detail.html(slide.desc);
+                if(base.options.detail.mobile)
+                    base.options.detail.mobile.html(slide.desc.mobile);
+                else
+                    base.options.detail.all.html(slide.desc.all);
             }
             var offset = -1*index*base.$el.parent().width();
 
