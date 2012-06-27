@@ -28,14 +28,36 @@
 
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
-                base.$el.append('<img src="'+slide.image+'" alt="'+slide.title+'"/>');
+                var slideContent;
+                if (base.options.type == 'div'){
+                    slideContent = '<div style="background-image: url(' + slide.image + ');"></div>';
+                    if(base.options.detail){
+                        if(base.options.detail.desktop)
+                            slideContent = '<div style="background-image: url(' + slide.image + ');"><div class="' + base.options.detail.desktop + '">' + slide.desc.desktop + '</div></div>';
+                    }
+                    if(slide.link){
+                        slideContent = $(slideContent).data('link', slide.link);
+                        slideContent.click(function(){
+                            document.location.href = $(this).data('link');
+                        }).css('cursor', 'pointer');
+                    }
+                    base.$el.append(slideContent);
+                }
+                else if (base.options.type == 'img'){
+                    slideContent = '<img src="'+slide.image+'" alt="'+slide.title+'"/>';
+                    if(slide.link)
+                        base.$el.append('<a href="' + slide.link + '">' + slideContent + '</a>');
+                    else
+                        base.$el.append(slideContent);
+                }
+
                 if(base.slides.length > 1){
                     var link = $('<a href="#"><li></li></a>');
                     link.click(base.clickLink);
                     base.options.pager.append(link);
                 }
             }
-            base.$el.width(base.count*base.options.slideWidth);
+            base.$el.width(base.count * base.$el.width());
 
             //Add all CSS3 transition property with vendorPrefixes
             for (var n = 0; n < vendorPrefixes.length; n++) {
@@ -76,9 +98,13 @@
             if (!slide) return;
             base.currentIndex = index;
             if (base.options.detail){
-                base.options.detail.html('<h3>'+ (index+1) +'/'+base.count+'<br>'+slide.title+'</h3>');
+                if(base.options.detail.mobile)
+                    base.options.detail.mobile.html(slide.desc.mobile);
+                else
+                    base.options.detail.all.html(slide.desc.all);
             }
-            var offset = -1*index*base.options.slideWidth;
+            var offset = -1*index*base.$el.parent().width();
+
             if (base.transformProp && base.transitionProp) {
                 base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
                 base.$el.css(base.transformProp,'translate3d('+ offset +'px,0,0)');
@@ -120,9 +146,9 @@
     $.inlineSlides.defaultOptions = {
         pager: null,
         detail: null,
-        slideWidth: null,
         duration: '0.3s',
-        easing: 'ease'
+        easing: 'ease',
+        type: 'img'
     };
 
     $.fn.inlineSlides = function(slides, options){
