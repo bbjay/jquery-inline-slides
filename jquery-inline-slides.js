@@ -31,17 +31,25 @@
                 var slideContent;
                 if (base.options.type == 'div'){
                     slideContent = '<div style="background-image: url(' + slide.image + ');"></div>';
-                    if(base.options.detail.desktop)
-                        slideContent = '<div style="background-image: url(' + slide.image + ');"><div class="' + base.options.detail.desktop + '">' + slide.desc.desktop + '</div></div>';
+                    if(base.options.detail){
+                        if(base.options.detail.desktop)
+                            slideContent = '<div style="background-image: url(' + slide.image + ');"><div class="' + base.options.detail.desktop + '">' + slide.desc.desktop + '</div></div>';
+                    }
+                    if(slide.link){
+                        slideContent = $(slideContent).data('link', slide.link);
+                        slideContent.click(function(){
+                            document.location.href = $(this).data('link');
+                        }).css('cursor', 'pointer');
+                    }
+                    base.$el.append(slideContent);
                 }
                 else if (base.options.type == 'img'){
                     slideContent = '<img src="'+slide.image+'" alt="'+slide.title+'"/>';
+                    if(slide.link)
+                        base.$el.append('<a href="' + slide.link + '">' + slideContent + '</a>');
+                    else
+                        base.$el.append(slideContent);
                 }
-                if(slide.link){
-                    base.$el.append('<a href="' + slide.link + '">' + slideContent + '</a>');
-                }
-                else
-                    base.$el.append(slideContent);
 
                 if(base.slides.length > 1){
                     var link = $('<a href="#"><li></li></a>');
