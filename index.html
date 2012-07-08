@@ -7,6 +7,7 @@
     <meta name="description" content="jQuery-inline-slides : jQuery plugin to display an inline carousel-like slideshow with CSS3 transforms and fallback" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/inline-slides.css">
 
     <title>jQuery-inline-slides</title>
   </head>
@@ -40,6 +41,25 @@
 <p><a href="https://github.com/bbjay" class="user-mention">@bbjay</a>
 <a href="https://github.com/mariuskueng" class="user-mention">@mariuskueng</a></p>
       </section>
+
+      <div id="wrapper">
+            <!-- this is the overall slideshow wrapper -->
+            <div id="slideshow-wrapper">
+                <!-- the images get included into this div -->
+                <div class="slideshow-images"></div>
+            </div>
+
+            <!-- in here goes your image description -->
+            <div id="detail"></div>
+
+            <!-- this is the pager to switch between images -->
+            <ul class="pager"></ul>
+        </div>
+
+        <!-- import jquery, the plugin and your own scripts -->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script type="text/javascript" src="https://raw.github.com/bbjay/jquery-inline-slides/master/jquery-inline-slides.js"></script>
+        <script type="text/javascript" src="javascripts/main.js"></script>
     </div>
 
     <!-- FOOTER  -->
