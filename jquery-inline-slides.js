@@ -101,7 +101,7 @@
                 if(base.options.detail.mobile)
                     base.options.detail.mobile.html(slide.desc.mobile);
                 else
-                    base.options.detail.all.html(slide.desc.all);
+                    base.options.detail.html(slide.desc);
             }
             var offset = -1*index*base.$el.parent().width();
 
