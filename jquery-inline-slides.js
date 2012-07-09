@@ -146,9 +146,9 @@
     $.inlineSlides.defaultOptions = {
         pager: null,
         detail: null,
-        duration: '0.3s',
-        easing: 'ease',
-        type: 'img'
+        duration: '0.4s',
+        easing: 'ease-in-out',
+        type: 'div'
     };
 
     $.fn.inlineSlides = function(slides, options){
