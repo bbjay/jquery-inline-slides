@@ -25,16 +25,14 @@
             base.count = slides.length;
 
             base.options = $.extend({},$.inlineSlides.defaultOptions, options);
+            // determine slide width from the wrapper div if not given as an option
+            base.slideWidth = base.options.width || base.$el.parent().width();
 
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
                 var slideContent;
                 if (base.options.type == 'div'){
-                    slideContent = '<div style="background-image: url(' + slide.image + ');"></div>';
-                    if(base.options.detail){
-                        if(base.options.detail.desktop)
-                            slideContent = '<div style="background-image: url(' + slide.image + ');"><div class="' + base.options.detail.desktop + '">' + slide.desc.desktop + '</div></div>';
-                    }
+                    slideContent = '<div style="width:'+base.slideWidth+'px; background-image: url(' + slide.image + ');"></div>';
                     if(slide.link){
                         slideContent = $(slideContent).data('link', slide.link);
                         slideContent.click(function(){
@@ -80,7 +78,7 @@
             base.transformProp = base.getCSSProp('transform');
             base.transitionProp = base.getCSSProp('transition');
             base.showSlideNr(0);
-      };
+        };
         base.clickLink = function(e){
             var index = Array.prototype.indexOf.call(base.options.pager.children(), e.target.parentNode);
             base.showSlideNr(index);
@@ -103,7 +101,7 @@
                 else
                     base.options.detail.html(slide.desc);
             }
-            var offset = -1*index*base.$el.parent().width();
+            var offset = -1*index*base.slideWidth;
 
             if (base.transformProp && base.transitionProp) {
                 base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
@@ -117,7 +115,7 @@
                     left: offset
                 });
             }
-            
+            // update pager
             base.options.pager.children().removeClass('active');
             $(base.options.pager.children()[index]).addClass('active');
         };
