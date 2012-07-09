@@ -18,16 +18,17 @@ body{
 #slideshow-wrapper:after{
     clear: both;
 }
-
+.slideshow-images {
+    height: 100%;
+}
+.slideshow-images div{
+    height: 100%;
+    float: left;
+}
 .slideshow-images img{
     display: block;
     height: auto;
     float: left;
-    border:none;
-    margin: 0;
-    padding:0;
-    -webkit-box-shadow:none;
-    box-shadow:none;
 }
 ul.pager{
     position: relative;
@@ -36,7 +37,7 @@ ul.pager{
     width: 242px;
     padding:0;
     font-size: 28px;
-    line-height: 30px;
+    line-height: 15px;
     text-align: center;
 }
 ul.pager a{

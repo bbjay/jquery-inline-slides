@@ -15,7 +15,7 @@ $(document).ready(function(){
             title: null,
             desc: '<p>This is <b>description</b> #' + (i + 1) + '</p>',
             image: IMAGES[i],
-            link: '#'
+            //link: '#'
         };
 
         //Add the slide to array
@@ -28,9 +28,7 @@ $(document).ready(function(){
     slideshowWrapper.find('.slideshow-images').inlineSlides(SLIDES, {
         detail: $('#detail'),
         pager: $('.pager'),
-        duration: '0.3s',
-        easing: 'ease',
-        type: 'img'
+        duration: '0.4s',
     });
 
 });
