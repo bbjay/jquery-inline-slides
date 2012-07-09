@@ -57,14 +57,14 @@
                 }
             }
 
-            //Add all CSS3 transition property with vendorPrefixes
-            for (var n = 0; n < vendorPrefixes.length; n++) {
-                var prefix = '-' + vendorPrefixes[n].toLowerCase() + '-transition';
-                var propertyValue = 'all ' + base.options.duration + ' ' + base.options.easing;
-                base.$el.css(prefix, propertyValue);
-            }
-            base.$el.css('transition', 'all ' + base.options.duration + ' ' + base.options.easing);
+            // detect CSS3 properties
+            base.transformProp = base.getCSSProp('transform');
+            base.transitionProp = base.getCSSProp('transition');
 
+            // set transition for the base element
+            base.$el.css(base.transitionProp, 'all ' + base.options.duration + ' ' + base.options.easing);
+
+            // detect & setup touchwipe
             if ($.fn.touchwipe) {
                 base.$el.touchwipe({
                      wipeLeft: base.slideLeft,
@@ -75,8 +75,6 @@
                 });
             }
 
-            base.transformProp = base.getCSSProp('transform');
-            base.transitionProp = base.getCSSProp('transition');
             base.showSlideNr(0);
         };
         base.clickLink = function(e){
@@ -111,6 +109,7 @@
                 base.$el.css(base.transitionProp,'left ' + offset +'px');
             }
             else {
+                // jQuery animate fallback
                 base.$el.animate({
                     left: offset
                 });
