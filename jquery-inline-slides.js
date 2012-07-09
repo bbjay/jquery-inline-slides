@@ -23,6 +23,7 @@
 
             base.slides = slides;
             base.count = slides.length;
+            base.$el.width(base.count * base.$el.width());
 
             base.options = $.extend({},$.inlineSlides.defaultOptions, options);
             // determine slide width from the wrapper div if not given as an option
@@ -55,7 +56,6 @@
                     base.options.pager.append(link);
                 }
             }
-            base.$el.width(base.count * base.$el.width());
 
             //Add all CSS3 transition property with vendorPrefixes
             for (var n = 0; n < vendorPrefixes.length; n++) {
