@@ -1,10 +1,12 @@
-jquery-inline-slides
+jQuery-inline-slides
 ====================
 
 jQuery plugin to display an inline carousel-like image slideshow with CSS3 transforms and fallbacks.
 
 The fallback order is as follows:
 CSS transform > CSS transition > jQuery.animate
+
+See the [demo](http://bbjay.github.com/jquery-inline-slides/)
 
 Features
 --------
