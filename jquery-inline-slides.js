@@ -50,7 +50,8 @@
                         base.$el.append(slideContent);
                 }
 
-                if(base.slides.length > 1){
+                // setup pager
+                if(base.options.pager && base.slides.length > 1){
                     var link = $('<a href="#"><li></li></a>');
                     link.click(base.clickLink);
                     base.options.pager.append(link);
@@ -75,6 +76,7 @@
                 });
             }
 
+            // setup button handlers
             if (base.options.rightButton !== null) {
                 $(base.options.rightButton).click(function(e){
                     base.slideLeft();
@@ -106,14 +108,17 @@
             var slide = base.slides[index];
             if (!slide) return;
             base.currentIndex = index;
+
+            // update slide description
             if (base.options.detail){
                 if(base.options.detail.mobile)
                     base.options.detail.mobile.html(slide.desc.mobile);
                 else
                     base.options.detail.html(slide.desc);
             }
-            var offset = -1*index*base.slideWidth;
 
+            // perform slide animation
+            var offset = -1*index*base.slideWidth;
             if (base.transformProp && base.transitionProp) {
                 base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
                 base.$el.css(base.transformProp,'translate3d('+ offset +'px,0,0)');
@@ -127,14 +132,22 @@
                     left: offset
                 });
             }
+
             // update pager
-            base.options.pager.children().removeClass('active');
-            $(base.options.pager.children()[index]).addClass('active');
+            if (base.options.pager !== null) {
+                base.options.pager.children().removeClass('active');
+                $(base.options.pager.children()[index]).addClass('active');
+            }
+
             // update buttons
-            if (index === 0) base.options.leftButton.removeClass('active');
-            else base.options.leftButton.addClass('active');
-            if (index === base.count-1) base.options.rightButton.removeClass('active');
-            else base.options.rightButton.addClass('active');
+            if (base.options.leftButton !== null) {
+                if (index === 0) base.options.leftButton.removeClass('active');
+                else base.options.leftButton.addClass('active');
+            }
+            if (base.options.rightButton !== null) {
+                if (index === base.count-1) base.options.rightButton.removeClass('active');
+                else base.options.rightButton.addClass('active');
+            }
         };
 
         base.getCSSProp = function (property) {
@@ -144,7 +157,7 @@
             if(typeof s[p] == 'string') {return p; }
 
             // Tests for vendor specific prop
-            v = vendorPrefixes;
+            var v = vendorPrefixes;
             pu = p.charAt(0).toUpperCase() + p.substr(1);
             for(var i=0; i<v.length; i++) {
                 if(typeof s[v[i] + pu] == 'string') { 
