@@ -75,6 +75,19 @@
                 });
             }
 
+            if (base.options.rightButton !== null) {
+                $(base.options.rightButton).click(function(e){
+                    base.slideLeft();
+                    return false;
+                });
+            }
+            if (base.options.leftButton !== null) {
+                $(base.options.leftButton).click(function(e){
+                    base.slideRight();
+                    return false;
+                });
+            }
+
             base.showSlideNr(0);
         };
         base.clickLink = function(e){
@@ -117,6 +130,11 @@
             // update pager
             base.options.pager.children().removeClass('active');
             $(base.options.pager.children()[index]).addClass('active');
+            // update buttons
+            if (index === 0) base.options.leftButton.removeClass('active');
+            else base.options.leftButton.addClass('active');
+            if (index === base.count-1) base.options.rightButton.removeClass('active');
+            else base.options.rightButton.addClass('active');
         };
 
         base.getCSSProp = function (property) {
@@ -145,7 +163,9 @@
         detail: null,
         duration: '0.4s',
         easing: 'ease-in-out',
-        type: 'div'
+        type: 'div',
+        rightButton: null,
+        leftButton: null
     };
 
     $.fn.inlineSlides = function(slides, options){
