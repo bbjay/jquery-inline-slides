@@ -93,7 +93,7 @@
             base.showSlideNr(0);
         };
         base.clickLink = function(e){
-            var index = Array.prototype.indexOf.call(base.options.pager.children(), e.target.parentNode);
+            var index = $.inArray(e.target.parentNode, base.options.pager.children());
             base.showSlideNr(index);
             return false;
         };
