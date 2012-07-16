@@ -100,7 +100,7 @@
         };
 
         base.slideLeft = function(){
-            if (base.currentIndex < base.count) base.showSlideNr(base.currentIndex + 1);
+            if (base.currentIndex +1 < base.count) base.showSlideNr(base.currentIndex + 1);
         };
         base.slideRight = function(){
             if (base.currentIndex > 0) base.showSlideNr(base.currentIndex - 1);
