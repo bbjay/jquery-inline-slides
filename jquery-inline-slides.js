@@ -20,14 +20,13 @@
 
         base.init = function(){
             if( typeof( slides ) === "undefined" || slides === null ) slides = [];
-
             base.slides = slides;
-            base.count = slides.length;
-            base.$el.width(base.count * base.$el.width());
 
             base.options = $.extend({},$.inlineSlides.defaultOptions, options);
             // determine slide width from the wrapper div if not given as an option
             base.slideWidth = base.options.width || base.$el.parent().width();
+            base.count = base.options.count || slides.length;
+            base.$el.width(base.count * base.$el.width());
 
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
@@ -106,7 +105,6 @@
         };
         base.showSlideNr = function(index){
             var slide = base.slides[index];
-            if (!slide) return;
             base.currentIndex = index;
 
             // update slide description
