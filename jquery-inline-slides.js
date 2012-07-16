@@ -62,7 +62,9 @@
             base.transitionProp = base.getCSSProp('transition');
 
             // set transition for the base element
-            base.$el.css(base.transitionProp, 'all ' + base.options.duration + ' ' + base.options.easing);
+            if (base.transitionProp) {
+                base.$el.css(base.transitionProp, 'all ' + base.options.duration + ' ' + base.options.easing);
+            }
 
             // detect & setup touchwipe
             if ($.fn.touchwipe) {
