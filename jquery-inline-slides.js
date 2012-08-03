@@ -1,9 +1,9 @@
 /**
- * jQuery Plugin to display an inline slideshow with css3 transforms and fallback
- * 
- * @author Jérémie Blaser, Marius Küng allink.creative (http://allink.ch)
- * @version 1.0 (2012-05-22)
- */
+* jQuery Plugin to display an inline slideshow with css3 transforms and fallback
+*
+* @author Jérémie Blaser, Marius Küng allink.creative (http://allink.ch)
+* @version 1.0 (2012-05-22)
+*/
  (function($){
     $.inlineSlides = function(el, slides, options){
         // To avoid scope issues, use 'base' instead of 'this'
@@ -22,13 +22,14 @@
             if( typeof( slides ) === "undefined" || slides === null ) slides = [];
 
             base.slides = slides;
-            base.count = slides.length;
+            base.count = slides.length+2;
             base.$el.width(base.count * base.$el.width());
 
             base.options = $.extend({},$.inlineSlides.defaultOptions, options);
-            // determine slide width from the wrapper div if not given as an option
+            // determine slide width from the wraper div if not given as an option
             base.slideWidth = base.options.width || base.$el.parent().width();
 
+            
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
                 var slideContent;
@@ -52,18 +53,21 @@
 
                 // setup pager
                 if(base.options.pager && base.slides.length > 1){
-                    var link = $('<a href="#"><li></li></a>');
+                    var link = $('<a href="#" class="a'+ i +'"><li></li></a>');
                     link.click(base.clickLink);
                     base.options.pager.append(link);
                 }
             }
+
 
             // detect CSS3 properties
             base.transformProp = base.getCSSProp('transform');
             base.transitionProp = base.getCSSProp('transition');
 
             // set transition for the base element
-            base.$el.css(base.transitionProp, 'all ' + base.options.duration + ' ' + base.options.easing);
+            if (base.transitionProp) {
+                base.$el.css(base.transitionProp, 'all ' + base.options.duration + ' ' + base.options.easing);
+            }
 
             // detect & setup touchwipe
             if ($.fn.touchwipe) {
@@ -99,7 +103,7 @@
         };
 
         base.slideLeft = function(){
-            if (base.currentIndex < base.count) base.showSlideNr(base.currentIndex + 1);
+            if (base.currentIndex +1 < base.count) base.showSlideNr(base.currentIndex + 1);
         };
         base.slideRight = function(){
             if (base.currentIndex > 0) base.showSlideNr(base.currentIndex - 1);
@@ -119,6 +123,7 @@
 
             // perform slide animation
             var offset = -1*index*base.slideWidth;
+        
             if (base.transformProp && base.transitionProp) {
                 base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
                 base.$el.css(base.transformProp,'translate3d('+ offset +'px,0,0)');
@@ -148,6 +153,9 @@
                 if (index === base.count-1) base.options.rightButton.removeClass('active');
                 else base.options.rightButton.addClass('active');
             }
+            if (base.options.slideChangeCallback !== null && typeof(base.options.slideChangeCallback) == 'function') {
+                base.options.slideChangeCallback(index);
+            }
         };
 
         base.getCSSProp = function (property) {
@@ -160,8 +168,8 @@
             var v = vendorPrefixes;
             pu = p.charAt(0).toUpperCase() + p.substr(1);
             for(var i=0; i<v.length; i++) {
-                if(typeof s[v[i] + pu] == 'string') { 
-                    return '-'+ v[i].toLowerCase() +'-'+ p; 
+                if(typeof s[v[i] + pu] == 'string') {
+                    return '-'+ v[i].toLowerCase() +'-'+ p;
                 }
             }
             return false;
@@ -178,7 +186,8 @@
         easing: 'ease-in-out',
         type: 'div',
         rightButton: null,
-        leftButton: null
+        leftButton: null,
+        slideChangeCallback: null
     };
 
     $.fn.inlineSlides = function(slides, options){
