@@ -22,11 +22,11 @@
             if( typeof( slides ) === "undefined" || slides === null ) slides = [];
 
             base.slides = slides;
-            base.count = slides.length+2;
+            base.count = slides.length;
             base.$el.width(base.count * base.$el.width());
 
             base.options = $.extend({},$.inlineSlides.defaultOptions, options);
-            // determine slide width from the wraper div if not given as an option
+            // determine slide width from the wrapper div if not given as an option
             base.slideWidth = base.options.width || base.$el.parent().width();
 
             
@@ -103,7 +103,7 @@
         };
 
         base.slideLeft = function(){
-            if (base.currentIndex +1 < base.count) base.showSlideNr(base.currentIndex + 1);
+            if (base.currentIndex < base.count) base.showSlideNr(base.currentIndex + 1);
         };
         base.slideRight = function(){
             if (base.currentIndex > 0) base.showSlideNr(base.currentIndex - 1);
