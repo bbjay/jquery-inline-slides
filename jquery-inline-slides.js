@@ -1,9 +1,9 @@
 /**
- * jQuery Plugin to display an inline slideshow with css3 transforms and fallback
- * 
- * @author Jérémie Blaser, Marius Küng allink.creative (http://allink.ch)
- * @version 1.0 (2012-05-22)
- */
+* jQuery Plugin to display an inline slideshow with css3 transforms and fallback
+*
+* @author Jérémie Blaser, Marius Küng allink.creative (http://allink.ch)
+* @version 1.0 (2012-05-22)
+*/
  (function($){
     $.inlineSlides = function(el, slides, options){
         // To avoid scope issues, use 'base' instead of 'this'
@@ -29,6 +29,7 @@
             // determine slide width from the wrapper div if not given as an option
             base.slideWidth = base.options.width || base.$el.parent().width();
 
+            
             for (var i = 0; i < base.slides.length; i++) {
                 var slide = base.slides[i];
                 var slideContent;
@@ -57,6 +58,7 @@
                     base.options.pager.append(link);
                 }
             }
+
 
             // detect CSS3 properties
             base.transformProp = base.getCSSProp('transform');
@@ -121,6 +123,7 @@
 
             // perform slide animation
             var offset = -1*index*base.slideWidth;
+        
             if (base.transformProp && base.transitionProp) {
                 base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
                 base.$el.css(base.transformProp,'translate3d('+ offset +'px,0,0)');
