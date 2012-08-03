@@ -150,6 +150,9 @@
                 if (index === base.count-1) base.options.rightButton.removeClass('active');
                 else base.options.rightButton.addClass('active');
             }
+            if (base.options.slideChangeCallback !== null && typeof(base.options.slideChangeCallback) == 'function') {
+                base.options.slideChangeCallback(index);
+            }
         };
 
         base.getCSSProp = function (property) {
@@ -180,7 +183,8 @@
         easing: 'ease-in-out',
         type: 'div',
         rightButton: null,
-        leftButton: null
+        leftButton: null,
+        slideChangeCallback: null
     };
 
     $.fn.inlineSlides = function(slides, options){
