@@ -23,9 +23,9 @@ optional for each slide:
 To-do
 -----
 - autoplay option
-- make some default next/prev arrows
 - instructions page
 - responsive slide resizing
+- ~~make some default next/prev arrows~~
 - ~~example html~~
 - ~~set transition styles with js (on init, duration and easing as params)~~
 - ~~css transistions fallback for browser without transform support. Are there any?~~
