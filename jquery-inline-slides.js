@@ -34,6 +34,10 @@
                 var slideContent;
                 if (base.options.type == 'div'){
                     slideContent = '<div style="width:'+base.slideWidth+'px; background-image: url(' + slide.image + ');"></div>';
+                    if(base.options.detail){
+                        if(base.options.detail.inside)
+                            slideContent = '<div style="background-image: url(' + slide.image + ');"><div class="' + base.options.detail.inside + '">' + slide.desc.inside + '</div></div>';
+                    }
                     if(slide.link){
                         slideContent = $(slideContent).data('link', slide.link);
                         slideContent.click(function(){
@@ -113,8 +117,8 @@
 
             // update slide description
             if (base.options.detail){
-                if(base.options.detail.mobile)
-                    base.options.detail.mobile.html(slide.desc.mobile);
+                if(base.options.detail.outside)
+                    base.options.detail.outside.html(slide.desc.outside);
                 else
                     base.options.detail.html(slide.desc);
             }
