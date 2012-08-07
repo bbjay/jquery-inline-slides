@@ -33,6 +33,10 @@
                 var slideContent;
                 if (base.options.type == 'div'){
                     slideContent = '<div style="width:'+base.slideWidth+'px; background-image: url(' + slide.image + ');"></div>';
+                    if(base.options.detail){
+                        if(base.options.detail.inside)
+                            slideContent = '<div style="background-image: url(' + slide.image + ');"><div class="' + base.options.detail.inside + '">' + slide.desc.inside + '</div></div>';
+                    }
                     if(slide.link){
                         slideContent = $(slideContent).data('link', slide.link);
                         slideContent.click(function(){
@@ -51,7 +55,7 @@
 
                 // setup pager
                 if(base.options.pager && base.slides.length > 1){
-                    var link = $('<a href="#"><li></li></a>');
+                    var link = $('<a href="#" class="a'+ i +'"><li></li></a>');
                     link.click(base.clickLink);
                     base.options.pager.append(link);
                 }
@@ -111,8 +115,8 @@
 
             // update slide description
             if (base.options.detail){
-                if(base.options.detail.mobile)
-                    base.options.detail.mobile.html(slide.desc.mobile);
+                if(base.options.detail.outside)
+                    base.options.detail.outside.html(slide.desc.outside);
                 else
                     base.options.detail.html(slide.desc);
             }
@@ -148,6 +152,9 @@
                 if (index === base.count-1) base.options.rightButton.removeClass('active');
                 else base.options.rightButton.addClass('active');
             }
+            if (base.options.slideChangeCallback !== null && typeof(base.options.slideChangeCallback) == 'function') {
+                base.options.slideChangeCallback(index);
+            }
         };
 
         base.getCSSProp = function (property) {
@@ -160,8 +167,8 @@
             var v = vendorPrefixes;
             pu = p.charAt(0).toUpperCase() + p.substr(1);
             for(var i=0; i<v.length; i++) {
-                if(typeof s[v[i] + pu] == 'string') { 
-                    return '-'+ v[i].toLowerCase() +'-'+ p; 
+                if(typeof s[v[i] + pu] == 'string') {
+                    return '-'+ v[i].toLowerCase() +'-'+ p;
                 }
             }
             return false;
@@ -178,7 +185,8 @@
         easing: 'ease-in-out',
         type: 'div',
         rightButton: null,
-        leftButton: null
+        leftButton: null,
+        slideChangeCallback: null
     };
 
     $.fn.inlineSlides = function(slides, options){
