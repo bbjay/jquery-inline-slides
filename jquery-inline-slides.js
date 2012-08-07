@@ -142,6 +142,9 @@
                 base.options.pager.children().removeClass('active');
                 $(base.options.pager.children()[index]).addClass('active');
             }
+            if (base.options.numericPager !== null) {
+                base.options.numericPager.html((index+1) + base.options.numericPagerSeparator + base.count);
+            }
 
             // update buttons
             if (base.options.leftButton !== null) {
@@ -180,6 +183,8 @@
 
     $.inlineSlides.defaultOptions = {
         pager: null,
+        numericPager: null,
+        numericPagerSeparator: ' / ',
         detail: null,
         duration: '0.4s',
         easing: 'ease-in-out',
