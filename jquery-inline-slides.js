@@ -2,7 +2,7 @@
  * jQuery Plugin to display an inline slideshow with css3 transforms and fallback
  * 
  * @author Jérémie Blaser, Marius Küng allink.creative (http://allink.ch)
- * @version 1.0 (2012-05-22)
+ * @version 1.1 (2012-08-7)
  */
  (function($){
     $.inlineSlides = function(el, slides, options){
