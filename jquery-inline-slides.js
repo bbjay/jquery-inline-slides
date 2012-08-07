@@ -39,9 +39,7 @@
                     }
                     if(slide.link){
                         slideContent = $(slideContent).data('link', slide.link);
-                        slideContent.click(function(){
-                            document.location.href = $(this).data('link');
-                        }).css('cursor', 'pointer');
+                        slideContent.click(base.clickImageLink).css('cursor', 'pointer');
                     }
                     base.$el.append(slideContent);
                 }
@@ -56,7 +54,7 @@
                 // setup pager
                 if(base.options.pager && base.slides.length > 1){
                     var link = $('<a href="#" class="a'+ i +'"><li></li></a>');
-                    link.click(base.clickLink);
+                    link.click(base.clickPagerItem);
                     base.options.pager.append(link);
                 }
             }
@@ -97,7 +95,11 @@
 
             base.showSlideNr(0);
         };
-        base.clickLink = function(e){
+
+        base.clickImageLink = function(){
+            document.location.href = $(this).data('link');
+        };
+        base.clickPagerItem = function(e){
             var index = $.inArray(e.target.parentNode, base.options.pager.children());
             base.showSlideNr(index);
             return false;
