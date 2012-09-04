@@ -106,6 +106,7 @@
             }
 
             base.showSlideNr(0);
+            if (base.options.autoplay) base.autoplay();
         };
 
         base.clickImageLink = function(){
@@ -114,6 +115,7 @@
         base.clickPagerItem = function(e){
             var index = $.inArray(e.target.parentNode, base.options.pager.children());
             base.showSlideNr(index);
+            if (base.options.autoplay) clearInterval(base.slideInterval);
             return false;
         };
 
@@ -193,6 +195,27 @@
 
         base.update_position = function() {
             base.showSlideNr(base.currentIndex);
+        };
+
+        base.autoplay = function(){
+            clearInterval(base.slideInterval);
+            base.slideInterval = setInterval(animate, parseFloat(base.options.duration, 10)*20000);
+            base.slideToRight = false;
+
+            function animate(){
+                if(base.currentIndex == base.count-1){
+                    base.slideToRight = true;
+                }
+                if(base.currentIndex === 0){
+                    base.slideToRight = false;
+                }
+                if(base.slideToRight) {
+                    base.slideRight();
+                }
+                else {
+                    base.slideLeft();
+                }
+            }
         };
 
         // Run initializer
