@@ -10,6 +10,7 @@
         // to reference this class from internal events and functions.
         var base = this;
         var vendorPrefixes = ['Moz', 'Webkit', 'Khtml', 'O', 'ms'];
+        var swipe = {};
 
         // Access to jQuery and DOM versions of element
         base.$el = $(el);
@@ -80,17 +81,6 @@
                 base.$el.css(base.transitionProp, 'all ' + base.options.duration + ' ' + base.options.easing);
             }
 
-            // detect & setup touchwipe
-            if ($.fn.touchwipe) {
-                base.$el.touchwipe({
-                     wipeLeft: base.slideLeft,
-                     wipeRight:base.slideRight,
-                     min_move_x: 50,
-                     min_move_y: 50,
-                     preventDefaultEvents: true
-                });
-            }
-
             // setup button handlers
             if (base.options.rightButton !== null) {
                 $(base.options.rightButton).click(function(e){
@@ -107,6 +97,7 @@
 
             base.showSlideNr(0);
             if (base.options.autoplay) base.autoplay();
+            if (base.slides.length > 1) swipe.init();
         };
 
         base.clickImageLink = function(){
@@ -197,6 +188,11 @@
             base.showSlideNr(base.currentIndex);
         };
 
+        base.moveSlider = function(offset){
+            base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
+            base.$el.css(base.transformProp,'translate3d('+ offset +'px,0,0)');
+        };
+
         base.autoplay = function(){
             clearInterval(base.slideInterval);
             base.slideInterval = setInterval(animate, parseFloat(base.options.duration, 10)*20000);
@@ -216,6 +212,72 @@
                     base.slideLeft();
                 }
             }
+        };
+
+        swipe.init = function() {
+            swipe.touchEnabled = 'ontouchstart' in window.document;
+            swipe.element = document.getElementById(base.$el.parent().attr('id'));
+            swipe.touch = false;
+
+            swipe.startX = 0;
+            swipe.distanceX = 0;
+            swipe.currentDistance = 0;
+            swipe.currentIndex = 0;
+            swipe.tolerance = 0.25;
+            swipe.offset = 0;
+
+            base.$el.children().css({
+                '-webkit-backface-visibility': 'hidden',
+                '-webkit-perspective': 1000
+            });
+
+            $(base.$el.parent()).bind('touchstart', swipe.startHandler);
+            $(base.$el.parent()).bind('touchmove', swipe.moveHandler);
+            $(base.$el.parent()).bind('touchend', swipe.endHandler);
+        };
+
+        swipe.startHandler = function(event) {
+            clearInterval(base.slideInterval);
+            swipe.event = swipe.touchEnabled ? event.originalEvent.touches[0] : event;
+
+            swipe.startX = swipe.event.pageX;
+            swipe.startY = swipe.event.pageY;
+            swipe.touch = true;
+            return false;
+        };
+
+        swipe.moveHandler =  function(event) {
+            if (swipe.touch) {
+                swipe.event = swipe.touchEnabled ? event.originalEvent.touches[0] : event;
+                swipe.distanceX = swipe.event.pageX - swipe.startX;
+                swipe.offset = -(base.currentIndex * base.slideWidth) + (swipe.distanceX);
+                base.moveSlider(swipe.offset);
+            }
+            return false;
+        };
+
+        swipe.endHandler = function(event) {
+            swipe.touch = false;
+            if(!swipe.distanceX) return false;
+
+            if(-swipe.distanceX > (base.slideWidth/2) - base.slideWidth * swipe.tolerance){
+                base.currentIndex++;
+                base.currentIndex = base.currentIndex >= base.count ? base.count-1 : base.currentIndex;
+            }
+            else if(swipe.distanceX > (base.slideWidth/2) - base.slideWidth * swipe.tolerance){
+                base.currentIndex--;
+                base.currentIndex = base.currentIndex < 0 ? 0 : base.currentIndex;
+            }
+            swipe.offset = -base.currentIndex * base.slideWidth;
+            base.moveSlider(swipe.offset);
+
+            base.options.pager.children().removeClass('active');
+            $(base.options.pager.children()[base.currentIndex]).addClass('active');
+
+            swipe.distanceX = 0;
+            swipe.offset = 0;
+
+            return false;
         };
 
         // Run initializer
