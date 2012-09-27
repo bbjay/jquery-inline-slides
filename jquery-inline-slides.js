@@ -22,7 +22,6 @@
         base.init = function(){
             if( typeof( slides ) === "undefined" || slides === null ) slides = [];
             base.slides = slides;
-
             base.options = $.extend({},$.inlineSlides.defaultOptions, options);
             // determine slide width from the wrapper div if not given as an option
             base.slideWidth = base.options.width || base.$el.parent().width();
@@ -48,7 +47,7 @@
                     slideContent = '<div style="width:'+base.slideWidth+'px; background-image: url(' + slide.image + ');"></div>';
                     if(base.options.detail){
                         if(base.options.detail.inside)
-                            slideContent = '<div style="background-image: url(' + slide.image + ');"><div class="' + base.options.detail.inside + '">' + slide.desc.inside + '</div></div>';
+                            slideContent = '<div style="width:'+base.slideWidth+'px; background-image: url(' + slide.image + ');"><div class="' + base.options.detail.inside + '">' + slide.desc.inside + '</div></div>';
                     }
                     if(slide.link){
                         slideContent = $(slideContent).data('link', slide.link);
@@ -96,8 +95,12 @@
             }
 
             base.showSlideNr(0);
-            if (base.options.autoplay) base.autoplay();
-            if (base.slides.length > 1) swipe.init();
+
+            if (base.options.autoplay)
+                base.autoplay();
+
+            if (base.slides.length > 1)
+                swipe.init();
         };
 
         base.clickImageLink = function(){
@@ -167,35 +170,9 @@
             }
         };
 
-        base.getCSSProp = function (property) {
-            var b = document.body || document.documentElement;
-            var s = b.style;
-            var p = property;
-            if(typeof s[p] == 'string') {return p; }
-
-            // Tests for vendor specific prop
-            var v = vendorPrefixes;
-            pu = p.charAt(0).toUpperCase() + p.substr(1);
-            for(var i=0; i<v.length; i++) {
-                if(typeof s[v[i] + pu] == 'string') {
-                    return '-'+ v[i].toLowerCase() +'-'+ p;
-                }
-            }
-            return false;
-        };
-
-        base.update_position = function() {
-            base.showSlideNr(base.currentIndex);
-        };
-
-        base.moveSlider = function(offset){
-            base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
-            base.$el.css(base.transformProp,'translate3d('+ offset +'px,0,0)');
-        };
-
         base.autoplay = function(){
             clearInterval(base.slideInterval);
-            base.slideInterval = setInterval(animate, parseFloat(base.options.duration, 10)*20000);
+            base.slideInterval = setInterval(animate, 10000);
             base.slideToRight = false;
 
             function animate(){
@@ -214,9 +191,26 @@
             }
         };
 
+        base.getCSSProp = function (property) {
+            var b = document.body || document.documentElement;
+            var s = b.style;
+            var p = property;
+            if(typeof s[p] == 'string') {return p; }
+
+            // Tests for vendor specific prop
+            var v = vendorPrefixes;
+            pu = p.charAt(0).toUpperCase() + p.substr(1);
+            for(var i=0; i<v.length; i++) {
+                if(typeof s[v[i] + pu] == 'string') {
+                    return '-'+ v[i].toLowerCase() +'-'+ p;
+                }
+            }
+            return false;
+        };
+
         swipe.init = function() {
             swipe.touchEnabled = 'ontouchstart' in window.document;
-            swipe.element = document.getElementById(base.$el.parent().attr('id'));
+            swipe.element = document.getElementById("sliderWrapper");
             swipe.touch = false;
 
             swipe.startX = 0;
@@ -226,58 +220,55 @@
             swipe.tolerance = 0.25;
             swipe.offset = 0;
 
-            base.$el.children().css({
-                '-webkit-backface-visibility': 'hidden',
-                '-webkit-perspective': 1000
-            });
-
             $(base.$el.parent()).bind('touchstart', swipe.startHandler);
             $(base.$el.parent()).bind('touchmove', swipe.moveHandler);
             $(base.$el.parent()).bind('touchend', swipe.endHandler);
-        };
 
+        };
         swipe.startHandler = function(event) {
             clearInterval(base.slideInterval);
             swipe.event = swipe.touchEnabled ? event.originalEvent.touches[0] : event;
-
             swipe.startX = swipe.event.pageX;
-            swipe.startY = swipe.event.pageY;
             swipe.touch = true;
             return false;
         };
-
         swipe.moveHandler =  function(event) {
             if (swipe.touch) {
                 swipe.event = swipe.touchEnabled ? event.originalEvent.touches[0] : event;
                 swipe.distanceX = swipe.event.pageX - swipe.startX;
-                swipe.offset = -(base.currentIndex * base.slideWidth) + (swipe.distanceX);
+                swipe.offset = -(base.currentIndex * base.slideWidth) + swipe.distanceX;
                 base.moveSlider(swipe.offset);
             }
             return false;
         };
-
         swipe.endHandler = function(event) {
             swipe.touch = false;
             if(!swipe.distanceX) return false;
 
-            if(-swipe.distanceX > (base.slideWidth/2) - base.slideWidth * swipe.tolerance){
+            if(-swipe.distanceX > (base.slideWidth/3) - base.slideWidth * swipe.tolerance){
                 base.currentIndex++;
                 base.currentIndex = base.currentIndex >= base.count ? base.count-1 : base.currentIndex;
             }
-            else if(swipe.distanceX > (base.slideWidth/2) - base.slideWidth * swipe.tolerance){
+            else if(swipe.distanceX > (base.slideWidth/3) - base.slideWidth * swipe.tolerance){
                 base.currentIndex--;
                 base.currentIndex = base.currentIndex < 0 ? 0 : base.currentIndex;
             }
             swipe.offset = -base.currentIndex * base.slideWidth;
-            base.moveSlider(swipe.offset);
+            base.showSlideNr(base.currentIndex);
 
             base.options.pager.children().removeClass('active');
             $(base.options.pager.children()[base.currentIndex]).addClass('active');
 
             swipe.distanceX = 0;
             swipe.offset = 0;
-
             return false;
+        };
+        base.moveSlider = function(offset){
+            base.$el.css(base.transformProp,'translate('+ offset +'px,0)');
+            base.$el.css(base.transformProp,'translate3d('+ offset +'px,0,0)');
+        };
+        base.update_position = function() {
+            base.showSlideNr(base.currentIndex);
         };
 
         // Run initializer
